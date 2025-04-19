@@ -1,7 +1,7 @@
 package com.ensolvers.challenge.controller;
 
 import com.ensolvers.challenge.dto.LoginRequestDTO;
-import com.ensolvers.challenge.dto.LoginResponseDTO;
+import com.ensolvers.challenge.dto.TokenResponseDTO;
 import com.ensolvers.challenge.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponseDTO login(@RequestBody LoginRequestDTO request) {
+    public TokenResponseDTO login(@RequestBody LoginRequestDTO request) {
         return authService.login(request);
     }
 

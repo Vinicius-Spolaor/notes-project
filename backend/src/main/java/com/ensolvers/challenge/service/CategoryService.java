@@ -1,7 +1,6 @@
 package com.ensolvers.challenge.service;
 
 import com.ensolvers.challenge.dto.CategoryDTO;
-import com.ensolvers.challenge.entity.Category;
 import com.ensolvers.challenge.exception.BusinessException;
 import com.ensolvers.challenge.mapper.CategoryMapper;
 import com.ensolvers.challenge.repository.CategoryRepository;
@@ -27,14 +26,15 @@ public class CategoryService {
         return categoryMapper.toDtoList(categoryRepository.findAll());
     }
 
-    public CategoryDTO createCategory(Category category) {
+    public CategoryDTO createCategory(CategoryDTO categoryDto) {
+        var category = categoryMapper.toEntity(categoryDto);
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
     @Transactional
     public void deleteCategory(Long categoryId) {
         var category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException("Category not found."));
-        var notesWithCategory = noteRepository.findByCategories_Id(categoryId);
+        var notesWithCategory = noteRepository.findByCategoriesId(categoryId);
 
         notesWithCategory.forEach(note -> note.getCategories().remove(category));
 

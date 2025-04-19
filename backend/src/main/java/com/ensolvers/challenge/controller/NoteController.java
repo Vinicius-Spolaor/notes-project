@@ -2,7 +2,6 @@ package com.ensolvers.challenge.controller;
 
 import com.ensolvers.challenge.dto.NoteDTO;
 import com.ensolvers.challenge.entity.User;
-import com.ensolvers.challenge.mapper.NoteMapper;
 import com.ensolvers.challenge.service.NoteService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -13,16 +12,19 @@ import java.util.List;
 @RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
-    private final NoteMapper noteMapper;
 
-    public NoteController(NoteService noteService, NoteMapper noteMapper) {
+    public NoteController(NoteService noteService) {
         this.noteService = noteService;
-        this.noteMapper = noteMapper;
     }
 
     @GetMapping("/active")
     public List<NoteDTO> getActiveNotes(@AuthenticationPrincipal User user) {
         return noteService.getActiveNotes(user);
+    }
+
+    @GetMapping("/{id}")
+    public NoteDTO getNoteById(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        return noteService.getNoteById(id, user);
     }
 
     @GetMapping("/archived")
@@ -32,12 +34,12 @@ public class NoteController {
 
     @PostMapping
     public NoteDTO createNote(@RequestBody NoteDTO note, @AuthenticationPrincipal User user) {
-        return noteService.createNote(noteMapper.toEntity(note), user);
+        return noteService.createNote(note, user);
     }
 
     @PutMapping("/{id}")
     public NoteDTO updateNote(@PathVariable Long id, @RequestBody NoteDTO note, @AuthenticationPrincipal User user) {
-        return noteService.updateNote(id, noteMapper.toEntity(note), user);
+        return noteService.updateNote(id, note, user);
     }
 
     @DeleteMapping("/{id}")

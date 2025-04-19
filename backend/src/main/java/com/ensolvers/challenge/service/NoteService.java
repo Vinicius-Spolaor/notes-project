@@ -28,7 +28,8 @@ public class NoteService {
     }
 
     @Transactional
-    public NoteDTO createNote(Note note, User user) {
+    public NoteDTO createNote(NoteDTO noteDto, User user) {
+        var note = noteMapper.toEntity(noteDto);
         note.setUser(user);
 
         if (note.getCategories() != null && !note.getCategories().isEmpty()) {
@@ -38,7 +39,9 @@ public class NoteService {
         return noteMapper.toDto(noteRepository.save(note));
     }
 
-    public NoteDTO updateNote(Long noteId, Note updatedNote, User user) {
+    public NoteDTO updateNote(Long noteId, NoteDTO updatedNoteDto, User user) {
+        var updatedNote = noteMapper.toEntity(updatedNoteDto);
+
         var note = getNoteByIdAndUser(noteId, user);
         note.setTitle(updatedNote.getTitle());
         note.setContent(updatedNote.getContent());
@@ -57,6 +60,10 @@ public class NoteService {
 
     public List<NoteDTO> getArchivedNotes(User user) {
         return noteMapper.toDtoList(noteRepository.findByUserAndArchived(user, true));
+    }
+
+    public NoteDTO getNoteById(Long noteId, User user) {
+        return noteMapper.toDto(getNoteByIdAndUser(noteId, user));
     }
 
     public NoteDTO archiveNote(Long noteId, User user) {

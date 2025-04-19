@@ -38,6 +38,10 @@ public class JwtService {
         return username.equals(user.getUsername()) && !isTokenExpired(token);
     }
 
+    public Long getExpirationInSeconds() {
+        return jwtExpiration / 1000;
+    }
+
     private boolean isTokenExpired(String token) {
         return parseClaims(token).getExpiration().before(new Date());
     }

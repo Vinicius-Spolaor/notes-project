@@ -1,7 +1,7 @@
 package com.ensolvers.challenge.service;
 
 import com.ensolvers.challenge.dto.LoginRequestDTO;
-import com.ensolvers.challenge.dto.LoginResponseDTO;
+import com.ensolvers.challenge.dto.TokenResponseDTO;
 import com.ensolvers.challenge.entity.User;
 import com.ensolvers.challenge.exception.BusinessException;
 import com.ensolvers.challenge.repository.UserRepository;
@@ -28,15 +28,22 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public LoginResponseDTO login(LoginRequestDTO request) {
+    public TokenResponseDTO login(LoginRequestDTO request) {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new BusinessException("User not found."));
-        var token = jwtService.generateToken(user);
+        var jwt = jwtService.generateToken(user);
 
-        return new LoginResponseDTO(token);
+        return TokenResponseDTO.builder()
+                .accessToken(jwt)
+                .tokenType("Bearer")
+                .expiresIn(jwtService.getExpirationInSeconds())
+                .scope("read write")
+                .userId(user.getId())
+                .username(user.getUsername())
+                .build();
     }
 
     public void register(LoginRequestDTO request) {
