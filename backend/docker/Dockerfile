@@ -1,14 +1,10 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:21-jdk-slim
-
-# Set the working directory in the container
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
+COPY . .
+RUN ./mvnw clean package -DskipTests
 
-# Copy the application JAR file into the container at /app
-COPY target/ensolvers-backend.jar /app/ensolvers-backend.jar
-
-# Expose the port that your application will run on
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Run the application when the container starts
-ENTRYPOINT ["java", "-jar", "/app/ensolvers-backend.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
