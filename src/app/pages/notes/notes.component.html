@@ -1,0 +1,88 @@
+<div class="notes-container">
+  <h1>Your Notes</h1>
+
+  <div class="controls">
+    <button class="btn btn-primary" (click)="openNoteModal()">
+      Create new note
+    </button>
+    <button
+      class="btn btn-secondary"
+      (click)="toggleArchiveView()"
+      [ngClass]="{
+        'btn-dark-green': !showArchived,
+        'btn-dark-orange': showArchived
+      }"
+    >
+      {{ showArchived ? "Show Active Notes" : "Show Archived Notes" }}
+    </button>
+    <select
+      class="form-select"
+      [(ngModel)]="selectedCategory"
+      (ngModelChange)="filterByCategory()"
+    >
+      <option value="">Category not filtered</option>
+      <option value="no-category">Notes without category</option>
+      <option *ngFor="let category of categories" [value]="category.name">
+        {{ category.name }}
+      </option>
+    </select>
+    <button class="btn btn-info" (click)="goToManageCategories()">
+      Manage Categories
+    </button>
+  </div>
+
+  <ul class="notes-list">
+    <li
+      *ngFor="let note of currentNotes$ | async"
+      class="note-item"
+      (click)="openNoteModal(note)"
+    >
+      <div class="note-header">
+        <h3>{{ note.title }}</h3>
+        <span
+          *ngIf="(note.categories ?? []).length > 0"
+          class="note-categories"
+        >
+          ({{ getCategoryNames(note.categories) }})
+        </span>
+      </div>
+      <p class="note-content">{{ note.content }}</p>
+      <div class="note-actions">
+        <button
+          class="btn btn-danger btn-sm"
+          (click)="confirmDeleteNote(note); $event.stopPropagation()"
+          title="Remove"
+        >
+          <i class="bi bi-trash"></i>
+          <span class="visually-hidden">Delete</span>
+        </button>
+        <button
+          class="btn btn-warning btn-sm"
+          *ngIf="!showArchived"
+          (click)="confirmArchiveNote(note); $event.stopPropagation()"
+          title="Archive"
+        >
+          <i class="bi bi-archive"></i>
+          <span class="visually-hidden">Archive</span>
+        </button>
+        <button
+          class="btn btn-success btn-sm"
+          *ngIf="showArchived"
+          (click)="confirmActivateNote(note); $event.stopPropagation()"
+          title="Activate"
+        >
+          <i class="bi bi-arrow-clockwise"></i>
+          <span class="visually-hidden">Activate</span>
+        </button>
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="openNoteModal(note); $event.stopPropagation()"
+          title="Edit"
+        >
+          <i class="bi bi-pencil"></i> <span class="visually-hidden">Edit</span>
+        </button>
+      </div>
+    </li>
+    <li *ngIf="(currentNotes$ | async)?.length === 0">No notes to display.</li>
+  </ul>
+</div>

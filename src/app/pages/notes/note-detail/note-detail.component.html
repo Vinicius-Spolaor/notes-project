@@ -1,0 +1,85 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ isEditing ? "Edit Note" : "Create New Note" }}</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('cancel')"
+  ></button>
+</div>
+<div class="modal-body">
+  <form #noteForm="ngForm">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        [(ngModel)]="note.title"
+        name="title"
+        required
+        #titleInput="ngModel"
+      />
+      <div
+        *ngIf="titleInput.invalid && (titleInput.dirty || titleInput.touched)"
+        class="text-danger"
+      >
+        Title is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">Content</label>
+      <textarea
+        class="form-control"
+        id="content"
+        [(ngModel)]="note.content"
+        name="content"
+        rows="5"
+      ></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Categories</label>
+      <div *ngFor="let category of allCategories" class="form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          [id]="'category-' + category.id"
+          [value]="category.id"
+          [checked]="isCategorySelected(category)"
+          (change)="toggleCategory(category)"
+        />
+        <label class="form-check-label" [for]="'category-' + category.id">{{
+          category.name
+        }}</label>
+      </div>
+    </div>
+    <div class="discreet-divider mb-2"></div>
+    <div class="form-check" *ngIf="isEditing">
+      <input
+        type="checkbox"
+        class="form-check-input"
+        id="archived"
+        [(ngModel)]="note.archived"
+        name="archived"
+      />
+      <label class="form-check-label" for="archived">Archive</label>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.dismiss('cancel')"
+  >
+    Cancel
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="noteForm.invalid"
+    (click)="activeModal.close('save')"
+  >
+    Save
+  </button>
+</div>

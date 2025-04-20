@@ -1,0 +1,93 @@
+@use 'sass:color';
+
+.notes-container {
+  padding: 20px;
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    .form-select {
+      width: auto;
+    }
+
+    .btn-dark-green {
+      background-color: darkgreen;
+      color: white;
+      border-color: darkgreen;
+
+      &:hover,
+      &:focus {
+        background-color: lighten(darkgreen, 10%);
+        border-color: lighten(darkgreen, 10%);
+      }
+    }
+
+    .btn-dark-orange {
+      background-color: darkorange;
+      color: white;
+      border-color: darkorange;
+
+      &:hover,
+      &:focus {
+        background-color: color.scale(#ff8c00, $lightness: 10%);
+        border-color: color.scale(#ff8c00, $lightness: 10%);
+      }
+    }
+  }
+
+  .notes-list {
+    list-style: none;
+    padding: 0;
+
+    .note-item {
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      cursor: pointer;
+
+      .note-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 5px;
+
+        h3 {
+          margin: 0;
+        }
+
+        .note-categories {
+          font-size: 0.8em;
+          color: #777;
+        }
+      }
+
+      .note-content {
+        margin-bottom: 30px;
+      }
+
+      .note-actions {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        display: flex;
+        gap: 5px;
+      }
+
+      .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.765625rem;
+        border-radius: 0.2rem;
+      }
+    }
+  }
+}

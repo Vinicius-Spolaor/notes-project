@@ -1,0 +1,44 @@
+<div class="categories-container">
+  <h1>Your Categories</h1>
+
+  <div class="controls">
+    <button class="btn btn-primary" (click)="openCategoryModal()">
+      Create new category
+    </button>
+    <button class="btn btn-secondary" (click)="navigateToNotes()">
+      Manage Notes
+    </button>
+  </div>
+
+  <ul class="categories-list">
+    <li *ngFor="let category of categories" class="category-item" (click)="openCategoryModal(category)">
+      <h3>{{ category.name }}</h3>
+      <div class="category-actions">
+        <button
+          class="btn btn-danger btn-sm"
+          (click)="deleteCategory(category); $event.stopPropagation()"
+          title="Remove"
+        >
+          <i class="bi bi-trash"></i>
+          <span class="visually-hidden">Delete</span>
+        </button>
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="openCategoryModal(category); $event.stopPropagation()"
+          title="Edit"
+        >
+          <i class="bi bi-pencil"></i> <span class="visually-hidden">Edit</span>
+        </button>
+      </div>
+    </li>
+    <li *ngIf="categories.length === 0" class="empty-list">
+      No categories created yet.
+    </li>
+  </ul>
+
+  <div *ngIf="isCreateCategoryModalVisible" class="modal-overlay"></div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+</div>
