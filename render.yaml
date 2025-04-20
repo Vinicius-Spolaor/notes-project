@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: ensolvers-backend
+    env: docker
+    dockerfilePath: backend/docker/Dockerfile
+    envVars:
+      - key: DATASOURCE_URL
+        fromDatabase: ensolvers-db
+        property: connectionString
+      - key: DATASOURCE_USERNAME
+        fromDatabase: ensolvers-db
+        property: user
+      - key: DATASOURCE_PASSWORD
+        fromDatabase: ensolvers-db
+        property: password
+      - key: JPA_HIBERNATE_DDL_AUTO
+        value: update
+
+  - type: static
+    name: ensolvers-frontend
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    redirects:
+      - source: "/*"
+        destination: "/index.html"
+        statusCode: 200
+
+databases:
+  - name: ensolvers-db
+    databaseName: ensolvers_db
+    user: ensolvers_user
