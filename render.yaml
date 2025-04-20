@@ -16,14 +16,17 @@ services:
       - key: JPA_HIBERNATE_DDL_AUTO
         value: update
 
-  - type: static
+  - type: web
     name: ensolvers-frontend
+    repo: https://github.com/Vinicius-Spolaor/notes-project
+    branch: main
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
-    redirects:
-      - source: "/*"
-        destination: "/index.html"
-        statusCode: 200
+    startCommand: serve -s frontend/dist/ensolvers-frontend
+    env: node
+    staticPublishPath: frontend/dist/ensolvers-frontend
+    buildFilter:
+      paths:
+        - frontend/**
 
 databases:
   - name: ensolvers-db
