@@ -1,0 +1,48 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ isEditing ? "Edit Category" : "Create New Category" }}</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('cancel')"
+  ></button>
+</div>
+<div class="modal-body">
+  <form #categoryForm="ngForm">
+    <div class="mb-3">
+      <label for="title" class="form-label">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        [(ngModel)]="category.name"
+        name="name"
+        required
+        #nameInput="ngModel"
+      />
+      <div
+        *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)"
+        class="text-danger"
+      >
+        Name is required.
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.dismiss('cancel')"
+  >
+    Cancel
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="categoryForm.invalid"
+    (click)="activeModal.close('save')"
+  >
+    Save
+  </button>
+</div>
