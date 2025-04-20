@@ -6,20 +6,17 @@ services:
     dockerfilePath: backend/Dockerfile
     envVars:
       - key: DATABASE_URL
-        valueFrom:
-          database:
-            name: ensolvers-db
-            property: connectionString
+        valueFromDatabase:
+          name: ensolvers-db
+          property: connectionString
       - key: DATABASE_USERNAME
-        valueFrom:
-          database:
-            name: ensolvers-db
-            property: user
+        valueFromDatabase:
+          name: ensolvers-db
+          property: user
       - key: DATABASE_PASSWORD
-        valueFrom:
-          database:
-            name: ensolvers-db
-            property: password
+        valueFromDatabase:
+          name: ensolvers-db
+          property: password
       - key: JPA_HIBERNATE_DDL_AUTO
         value: update
 
