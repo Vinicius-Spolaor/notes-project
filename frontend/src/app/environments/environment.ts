@@ -1,5 +1,4 @@
 export const environment = {
-  production: false,
-  host: 'http://localhost:4200',
-  backend_host: 'http://localhost:8080',
+  production: true,
+  backend_host: 'https://notes-web-api-qxqh.onrender.com',
 };
