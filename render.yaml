@@ -5,17 +5,17 @@ services:
     repo: https://github.com/Vinicius-Spolaor/notes-project
     dockerfilePath: backend/Dockerfile
     envVars:
-      - key: DATASOURCE_URL
+      - key: DATABASE_URL
         valueFrom:
           database:
             name: ensolvers-db
             property: connectionString
-      - key: DATASOURCE_USERNAME
+      - key: DATABASE_USERNAME
         valueFrom:
           database:
             name: ensolvers-db
             property: user
-      - key: DATASOURCE_PASSWORD
+      - key: DATABASE_PASSWORD
         valueFrom:
           database:
             name: ensolvers-db
@@ -27,13 +27,13 @@ services:
     name: ensolvers-frontend
     repo: https://github.com/Vinicius-Spolaor/notes-project
     branch: main
-    buildCommand: cd frontend && npm install && npm run build
-    startCommand: serve -s frontend/dist/ensolvers-frontend
     env: node
-    staticPublishPath: frontend/dist/ensolvers-frontend
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: npx serve -s frontend/dist/ensolvers-frontend
     buildFilter:
       paths:
         - frontend/**
+    envVars: []
 
 databases:
   - name: ensolvers-db
