@@ -46,7 +46,6 @@ Before running the app, ensure the following tools are installed:
 ensolvers-challenge/
 ├── backend/          # Spring Boot API
 ├── frontend/         # Angular SPA
-├── docker-compose.yml
 ├── start-app.sh      # Unix/Linux/macOS start script
 └── README.md
 ```
