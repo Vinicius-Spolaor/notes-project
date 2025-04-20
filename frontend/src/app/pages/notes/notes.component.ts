@@ -233,6 +233,7 @@ export class NotesComponent implements OnInit, OnDestroy {
               .update(this.selectedNote.id, this.selectedNote)
               .pipe(takeUntil(this.ngUnsubscribe))
               .subscribe(() => {
+                window.alert('Note updated successfully!');
                 if (this.showArchived) {
                   this.loadArchivedData();
                 } else {
@@ -244,6 +245,7 @@ export class NotesComponent implements OnInit, OnDestroy {
               .create(this.selectedNote)
               .pipe(takeUntil(this.ngUnsubscribe))
               .subscribe(() => {
+                window.alert('Note created successfully!');
                 if (this.showArchived) {
                   this.loadArchivedData();
                 } else {

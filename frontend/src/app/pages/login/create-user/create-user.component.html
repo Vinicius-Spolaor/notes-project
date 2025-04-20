@@ -1,0 +1,89 @@
+<div class="modal-header">
+  <h4 class="modal-title">Create New User</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('cancel')"
+  ></button>
+</div>
+<div class="modal-body">
+  <form #userForm="ngForm">
+    <div class="mb-3">
+      <label for="title" class="form-label">Username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        [(ngModel)]="user.username"
+        name="username"
+        required
+        #usernameInput="ngModel"
+      />
+      <div
+        *ngIf="
+          usernameInput.invalid &&
+          (usernameInput.dirty || usernameInput.touched)
+        "
+        class="text-danger"
+      >
+        Username is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <div class="password-input-group">
+        <input
+          [type]="hidePassword ? 'password' : 'text'"
+          class="form-control"
+          id="password"
+          [(ngModel)]="user.password"
+          name="password"
+          required
+          minlength="3"
+          #passwordInput="ngModel"
+        />
+        <button
+          class="password-toggle-button"
+          type="button"
+          (click)="togglePasswordVisibility()"
+        >
+          <mat-icon>{{
+            hidePassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </div>
+      <div
+        *ngIf="
+          passwordInput.invalid &&
+          (passwordInput.dirty || passwordInput.touched)
+        "
+        class="text-danger"
+      >
+        <small *ngIf="passwordInput.errors?.['required']"
+          >Password is required.</small
+        >
+        <small *ngIf="passwordInput.errors?.['minlength']"
+          >Password must have at least 8 characters.</small
+        >
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-outline-dark"
+    (click)="activeModal.dismiss('cancel')"
+  >
+    Cancel
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="userForm.invalid"
+    (click)="activeModal.close('save')"
+  >
+    Save
+  </button>
+</div>
