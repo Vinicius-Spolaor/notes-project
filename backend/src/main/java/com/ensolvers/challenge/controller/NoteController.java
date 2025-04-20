@@ -3,6 +3,7 @@ package com.ensolvers.challenge.controller;
 import com.ensolvers.challenge.dto.NoteDTO;
 import com.ensolvers.challenge.entity.User;
 import com.ensolvers.challenge.service.NoteService;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,12 +34,12 @@ public class NoteController {
     }
 
     @PostMapping
-    public NoteDTO createNote(@RequestBody NoteDTO note, @AuthenticationPrincipal User user) {
+    public NoteDTO createNote(@Valid @RequestBody NoteDTO note, @AuthenticationPrincipal User user) {
         return noteService.createNote(note, user);
     }
 
     @PutMapping("/{id}")
-    public NoteDTO updateNote(@PathVariable Long id, @RequestBody NoteDTO note, @AuthenticationPrincipal User user) {
+    public NoteDTO updateNote(@PathVariable Long id, @Valid @RequestBody NoteDTO note, @AuthenticationPrincipal User user) {
         return noteService.updateNote(id, note, user);
     }
 

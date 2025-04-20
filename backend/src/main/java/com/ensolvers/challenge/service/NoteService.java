@@ -45,6 +45,8 @@ public class NoteService {
         var note = getNoteByIdAndUser(noteId, user);
         note.setTitle(updatedNote.getTitle());
         note.setContent(updatedNote.getContent());
+        note.setCategories(updatedNote.getCategories());
+        note.setArchived(updatedNote.isArchived());
 
         return noteMapper.toDto(noteRepository.save(note));
     }

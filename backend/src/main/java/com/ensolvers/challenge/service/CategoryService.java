@@ -31,6 +31,16 @@ public class CategoryService {
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
+    public CategoryDTO updateCategory(Long categoryId, CategoryDTO updatedCategoryDto) {
+        var updatedCategory = categoryMapper.toEntity(updatedCategoryDto);
+
+        var category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException("Category not found."));
+        category.setName(updatedCategory.getName());
+        category.setNotes(updatedCategory.getNotes());
+
+        return categoryMapper.toDto(categoryRepository.save(category));
+    }
+
     @Transactional
     public void deleteCategory(Long categoryId) {
         var category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException("Category not found."));
