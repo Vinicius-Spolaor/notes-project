@@ -2,17 +2,24 @@ services:
   - type: web
     name: ensolvers-backend
     env: docker
-    dockerfilePath: backend/docker/Dockerfile
+    repo: https://github.com/Vinicius-Spolaor/notes-project
+    dockerfilePath: backend/Dockerfile
     envVars:
       - key: DATASOURCE_URL
-        fromDatabase: ensolvers-db
-        property: connectionString
+        valueFrom:
+          database:
+            name: ensolvers-db
+            property: connectionString
       - key: DATASOURCE_USERNAME
-        fromDatabase: ensolvers-db
-        property: user
+        valueFrom:
+          database:
+            name: ensolvers-db
+            property: user
       - key: DATASOURCE_PASSWORD
-        fromDatabase: ensolvers-db
-        property: password
+        valueFrom:
+          database:
+            name: ensolvers-db
+            property: password
       - key: JPA_HIBERNATE_DDL_AUTO
         value: update
 
