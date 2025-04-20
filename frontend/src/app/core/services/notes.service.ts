@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Note } from '../models/note.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class NotesService {
-  private baseUrl = 'http://localhost:8080/notes';
+  private baseUrl = `${environment.backend_host}/notes`;
 
   constructor(private http: HttpClient) {}
 

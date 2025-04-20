@@ -20,16 +20,20 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     tap({
       next: () => {},
       error: (error) => {
-        if (
-          error instanceof HttpErrorResponse &&
-          (error.status === 401 || error.status === 403)
-        ) {
-          console.error(
-            'Unauthorized or Forbidden request. Redirecting to login.',
-            error
-          );
-          router.navigate(['/login']);
-        }
+        if (error instanceof HttpErrorResponse)
+          if (error.status === 401 || error.status === 403) {
+            const message = 'Unauthorized or Forbidden request. Redirecting to login.';
+            window.alert(message);
+            console.error(message, error);
+            router.navigate(['/login']);
+            throw error;
+          } else if (error.status === 0 && error.statusText === 'Unknown Error') {
+            const message = 'Could not connect to the server. Please check your network connection and ensure the backend is running.';
+            window.alert(message);
+            console.error(message, error);
+            router.navigate(['/login']);
+            throw error;
+          }
         throw error;
       },
     })

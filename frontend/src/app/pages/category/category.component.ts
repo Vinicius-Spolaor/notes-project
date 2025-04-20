@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Category } from '../../core/models/category.model';
 import { CategoryService } from '../../core/services/category.service';
@@ -17,7 +23,7 @@ import { CategoryDetailComponent } from './category-detail/category-detail.compo
   styleUrl: './category.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CategoryComponent implements OnInit , OnDestroy {
+export class CategoryComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
   error = '';
   private ngUnsubscribe = new Subject<void>();
@@ -47,7 +53,8 @@ export class CategoryComponent implements OnInit , OnDestroy {
 
   loadCategories(): void {
     this.loadingService.show();
-    this.categoryService.getAllCategories()
+    this.categoryService
+      .getAllCategories()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (categories) => {
@@ -76,7 +83,8 @@ export class CategoryComponent implements OnInit , OnDestroy {
   createCategory(): void {
     if (this.newCategoryName.trim()) {
       this.loadingService.show();
-      this.categoryService.createCategory({ name: this.newCategoryName })
+      this.categoryService
+        .createCategory({ name: this.newCategoryName })
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
           next: (newCategory) => {
@@ -98,31 +106,33 @@ export class CategoryComponent implements OnInit , OnDestroy {
   deleteCategory(category: Category): void {
     const modalRef: NgbModalRef = this.modalService.open(
       ConfirmationModalComponent
-        );
-        modalRef.componentInstance.title = 'Confirm Category Deletion';
-        modalRef.componentInstance.message =
-          'Are you sure you want to delete the category';
-        modalRef.componentInstance.itemName = category.name;
-        modalRef.componentInstance.item = category;
-        modalRef.componentInstance.confirmButtonText = 'Delete';
-        modalRef.result.then(
-          (result) => {
-            if (result === 'confirm') {
-              this.confirmDeleteCategory(category.id!);
-            }
-          },
-          (reason) => {
-          }
-        );
+    );
+    modalRef.componentInstance.title = 'Confirm Category Deletion';
+    modalRef.componentInstance.message =
+      'Are you sure you want to delete the category';
+    modalRef.componentInstance.itemName = category.name;
+    modalRef.componentInstance.item = category;
+    modalRef.componentInstance.confirmButtonText = 'Delete';
+    modalRef.result.then(
+      (result) => {
+        if (result === 'confirm') {
+          this.confirmDeleteCategory(category.id!);
+        }
+      },
+      (reason) => {}
+    );
   }
 
   confirmDeleteCategory(id: number): void {
     this.loadingService.show();
-    this.categoryService.deleteCategory(id)
+    this.categoryService
+      .deleteCategory(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: () => {
-          this.categories = this.categories.filter(category => category.id !== id);
+          this.categories = this.categories.filter(
+            (category) => category.id !== id
+          );
           this.loadingService.hide();
           this.cdr.detectChanges();
         },
@@ -136,38 +146,42 @@ export class CategoryComponent implements OnInit , OnDestroy {
   }
 
   openCategoryModal(category?: Category): void {
-      this.selectedCategory = category
-        ? { ...category }
-        : { id: null, name: '' };
+    this.selectedCategory = category ? { ...category } : { id: null, name: '' };
 
-      this.isEditing = !!category;
-      const modalRef = this.modalService.open(CategoryDetailComponent);
-      modalRef.componentInstance.category = this.selectedCategory;
-      modalRef.componentInstance.isEditing = this.isEditing;
-  
-      modalRef.result.then(
-        (result) => {
-          if (result === 'save') {
-            if (this.isEditing && this.selectedCategory?.id) {
-              this.categoryService
-                .update(this.selectedCategory.id, this.selectedCategory)
-                .pipe(takeUntil(this.ngUnsubscribe))
-                .subscribe(() => this.loadCategories());
-            } else if (!this.isEditing && this.selectedCategory) {
-              this.categoryService
-                .createCategory(this.selectedCategory)
-                .pipe(takeUntil(this.ngUnsubscribe))
-                .subscribe(() => this.loadCategories());
-            }
-            this.selectedCategory = null;
+    this.isEditing = !!category;
+    const modalRef = this.modalService.open(CategoryDetailComponent);
+    modalRef.componentInstance.category = this.selectedCategory;
+    modalRef.componentInstance.isEditing = this.isEditing;
+
+    modalRef.result.then(
+      (result) => {
+        if (result === 'save') {
+          if (this.isEditing && this.selectedCategory?.id) {
+            this.categoryService
+              .update(this.selectedCategory.id, this.selectedCategory)
+              .pipe(takeUntil(this.ngUnsubscribe))
+              .subscribe(() => {
+                window.alert('Category updated successfully!');
+                this.loadCategories();
+              });
+          } else if (!this.isEditing && this.selectedCategory) {
+            this.categoryService
+              .createCategory(this.selectedCategory)
+              .pipe(takeUntil(this.ngUnsubscribe))
+              .subscribe(() => {
+                window.alert('Category created successfully!');
+                this.loadCategories();
+              });
           }
-          this.cdr.detectChanges();
-        },
-        (reason) => {
           this.selectedCategory = null;
         }
-      );
-    }
+        this.cdr.detectChanges();
+      },
+      (reason) => {
+        this.selectedCategory = null;
+      }
+    );
+  }
 
   navigateToNotes(): void {
     this.router.navigate(['/notes']);

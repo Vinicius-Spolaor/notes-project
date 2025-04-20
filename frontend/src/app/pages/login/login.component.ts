@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { LoginRequest } from '../../core/models/login-request.model';
 import { AuthService } from '../../core/services/auth.service';
 import { TokenStorageService } from '../../core/services/token-storage.service';
@@ -9,6 +9,9 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CreateUserComponent } from './create-user/create-user.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -16,16 +19,18 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
   credentials: LoginRequest = { username: '', password: '' };
   errorMessage: string = '';
   loginForm: FormGroup;
   loading: boolean = false;
   hidePassword = true;
+  private ngUnsubscribe = new Subject<void>();
 
   constructor(
     private authService: AuthService,
     private tokenService: TokenStorageService,
+    private modalService: NgbModal,
     private fb: FormBuilder,
     private router: Router
   ) {
@@ -34,6 +39,11 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(1)]],
       rememberMe: [false],
     });
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   login(): void {
@@ -59,4 +69,25 @@ export class LoginComponent {
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
   }
+
+  openUserModal(user?: LoginRequest): void {
+      const modalUser = user ? { ...user } : { username: '', password: '' };
+      const modalRef = this.modalService.open(CreateUserComponent);
+      modalRef.componentInstance.user = modalUser;
+  
+      modalRef.result.then(
+        (result) => {
+          if (result === 'save') {
+            if (modalUser) {
+              this.authService
+                .register(modalUser)
+                .pipe(takeUntil(this.ngUnsubscribe))
+                .subscribe(() => window.alert('User created successfully!'));
+            }
+          }
+        },
+        (reason) => {
+        }
+      );
+    }
 }
