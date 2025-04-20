@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ensolvers</groupId>
-	<artifactId>EnsolversChallenge</artifactId>
+	<artifactId>ensolvers-backend</artifactId>
 	<version>1.0.0</version>
 	<name>EnsolversChallenge</name>
 	<description>Notes challenge</description>

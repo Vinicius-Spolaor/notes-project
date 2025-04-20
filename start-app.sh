@@ -5,7 +5,7 @@ echo "🚀 Starting EnsolversChallenge full stack application..."
 cd "$(dirname "$0")"
 
 echo "📦 Starting PostgreSQL via Docker..."
-docker compose -f backend/docker-compose.yml up -d
+docker compose -f backend/docker/docker-compose.yml up -d
 
 echo "⏳ Waiting for PostgreSQL to be ready..."
 sleep 10
