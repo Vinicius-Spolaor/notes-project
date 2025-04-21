@@ -1,4 +1,4 @@
-# 📘 EnsolversChallenge - Full Stack Notes App
+# 📘 Full Stack Notes App
 
 This project is a full-stack application developed for managing **notes** and **categories**, with secure authentication and integration between a Java Spring Boot backend and an Angular 19 frontend.
 
